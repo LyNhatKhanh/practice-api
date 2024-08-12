@@ -1,22 +1,28 @@
 package com.lynhatkhanh.identity_service.service.implement;
 
 import com.lynhatkhanh.identity_service.dto.request.AuthenticationRequest;
+import com.lynhatkhanh.identity_service.dto.request.IntrospectRequest;
 import com.lynhatkhanh.identity_service.dto.response.AuthenticationResponse;
+import com.lynhatkhanh.identity_service.dto.response.IntrospectResponse;
 import com.lynhatkhanh.identity_service.entity.User;
 import com.lynhatkhanh.identity_service.exception.AppException;
 import com.lynhatkhanh.identity_service.exception.ErrorCode;
 import com.lynhatkhanh.identity_service.repository.UserRepository;
 import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
+import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
+import com.nimbusds.jwt.SignedJWT;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.experimental.NonFinal;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
@@ -27,8 +33,23 @@ import java.util.Date;
 public class AuthenticationService {
     UserRepository  userRepository;
     @NonFinal
-    protected static final String SIGNER_KEY =
-            "8bliiFZR0IHbKAzA1IRjXVJ0L8MoWIT+wjSLflp9jlphmTfXUTSz5Sn8zk30//Tb";
+    @Value("${jwt.secretKey}")
+    protected String SIGNER_KEY;
+
+    public IntrospectResponse introspect(IntrospectRequest request)
+            throws JOSEException, ParseException {
+        String token = request.getToken();
+
+        JWSVerifier jwsVerifier = new MACVerifier(SIGNER_KEY.getBytes());
+        SignedJWT signedJWT = SignedJWT.parse(token);
+
+        Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
+        boolean verified = signedJWT.verify(jwsVerifier);
+
+        return IntrospectResponse.builder()
+                .valid(verified && expiryTime.after(new Date()))
+                .build();
+    }
 
     public AuthenticationResponse authenticated(AuthenticationRequest request) {
         User user = userRepository.findByUsername(request.getUsername())
