@@ -3,9 +3,13 @@ package com.lynhatkhanh.identity_service.controller;
 import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
 import com.lynhatkhanh.identity_service.dto.request.UserUpdateRequest;
 import com.lynhatkhanh.identity_service.dto.response.ApiResponse;
+import com.lynhatkhanh.identity_service.dto.response.UserResponse;
 import com.lynhatkhanh.identity_service.entity.User;
 import com.lynhatkhanh.identity_service.service.IUserService;
 import jakarta.validation.Valid;
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,14 +17,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/users")
+@RequiredArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class UserController {
-
-    private final IUserService userService;
-
-    @Autowired
-    public UserController(IUserService userService) {
-        this.userService = userService;
-    }
+    IUserService userService;
 
     @PostMapping
     ApiResponse<User> createUser(@RequestBody @Valid UserCreationRequest request){
@@ -37,14 +37,14 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    ApiResponse<User> getUser(@PathVariable("userId") String userId) {
+    ApiResponse<UserResponse> getUser(@PathVariable("userId") String userId) {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setResult(userService.getUser(userId));
         return apiResponse;
     }
 
     @PutMapping("/{userId}")
-    ApiResponse<User> updateUser(@PathVariable("userId") String userId, @RequestBody UserUpdateRequest request) {
+    ApiResponse<UserResponse> updateUser(@PathVariable("userId") String userId, @RequestBody UserUpdateRequest request) {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setResult(userService.updateUser(userId, request));
         return apiResponse;

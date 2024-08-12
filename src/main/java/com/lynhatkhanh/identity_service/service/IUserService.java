@@ -2,6 +2,7 @@ package com.lynhatkhanh.identity_service.service;
 
 import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
 import com.lynhatkhanh.identity_service.dto.request.UserUpdateRequest;
+import com.lynhatkhanh.identity_service.dto.response.UserResponse;
 import com.lynhatkhanh.identity_service.entity.User;
 
 import java.util.List;
@@ -12,9 +13,9 @@ public interface IUserService {
 
     List<User> getUsers();
 
-    User getUser(String userId);
+    UserResponse getUser(String userId);
 
-    User updateUser(String userId, UserUpdateRequest request);
+    UserResponse updateUser(String userId, UserUpdateRequest request);
 
     void deleteUser(String userId);
 
