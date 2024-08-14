@@ -22,4 +22,4 @@ logging:
     root: warn
 
 jwt:
-  secretKey: "8bliiFZR0IHbKAzA1IRjXVJ0L8MoWIT+wjSLflp9jlphmTfXUTSz5Sn8zk30//Tb"
+  signerKey: "8bliiFZR0IHbKAzA1IRjXVJ0L8MoWIT+wjSLflp9jlphmTfXUTSz5Sn8zk30//Tb"

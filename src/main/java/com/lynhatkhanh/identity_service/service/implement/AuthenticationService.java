@@ -33,7 +33,7 @@ import java.util.Date;
 public class AuthenticationService {
     UserRepository  userRepository;
     @NonFinal
-    @Value("${jwt.secretKey}")
+    @Value("${jwt.signerKey}")
     protected String SIGNER_KEY;
 
     public IntrospectResponse introspect(IntrospectRequest request)
