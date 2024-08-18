@@ -14,7 +14,7 @@ public interface UserMapper {
     User toUser(UserCreationRequest request);
 
     @Mapping(source = "firstName", target = "lastName")
-    @Mapping(target = "dob", ignore = true)
+//    @Mapping(target = "dob", ignore = true)
     UserResponse toUserResponse(User user);
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
 }

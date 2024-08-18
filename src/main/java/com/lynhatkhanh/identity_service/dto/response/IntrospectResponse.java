@@ -1,15 +1,13 @@
 package com.lynhatkhanh.identity_service.dto.response;
 
-import com.lynhatkhanh.identity_service.dto.request.AuthenticationRequest;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class AuthenticationResponse {
-    String token;
-    boolean authenticated;
+public class IntrospectResponse {
+    boolean valid;
 }
