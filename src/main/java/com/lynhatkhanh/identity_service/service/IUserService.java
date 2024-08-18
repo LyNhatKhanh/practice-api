@@ -9,9 +9,11 @@ import java.util.List;
 
 public interface IUserService {
 
-    User createUser(UserCreationRequest request);
+    UserResponse getMyInfo();
 
-    List<User> getUsers();
+    UserResponse createUser(UserCreationRequest request);
+
+    List<UserResponse> getUsers();
 
     UserResponse getUser(String userId);
 
