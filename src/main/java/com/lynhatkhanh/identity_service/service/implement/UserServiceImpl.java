@@ -3,11 +3,13 @@ package com.lynhatkhanh.identity_service.service.implement;
 import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
 import com.lynhatkhanh.identity_service.dto.request.UserUpdateRequest;
 import com.lynhatkhanh.identity_service.dto.response.UserResponse;
+import com.lynhatkhanh.identity_service.entity.Role;
 import com.lynhatkhanh.identity_service.entity.User;
 import com.lynhatkhanh.identity_service.enums.RoleEnum;
 import com.lynhatkhanh.identity_service.exception.AppException;
 import com.lynhatkhanh.identity_service.exception.ErrorCode;
 import com.lynhatkhanh.identity_service.mapper.UserMapper;
+import com.lynhatkhanh.identity_service.repository.RoleRepository;
 import com.lynhatkhanh.identity_service.repository.UserRepository;
 import com.lynhatkhanh.identity_service.service.IUserService;
 import lombok.AccessLevel;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,7 @@ import java.util.List;
 @Slf4j
 public class UserServiceImpl implements IUserService {
     UserRepository userRepository;
+    RoleRepository roleRepository;
     UserMapper userMapper;
 
     @Override
@@ -54,9 +58,12 @@ public class UserServiceImpl implements IUserService {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        HashSet<String> roles = new HashSet<>();
+        /*HashSet<String> roles = new HashSet<>();
         roles.add(RoleEnum.USER.name());
-        newUser.setRoles(roles);
+        newUser.setRoles(roles);*/
+
+        List<Role> roles = roleRepository.findAllById(request.getRoles());
+        newUser.setRoles(new HashSet<>(roles));
 
         User createdUser = userRepository.save(newUser);
 
@@ -64,14 +71,15 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public List<UserResponse> getUsers() {
         log.info("in getUsers method");
         List<User> users = userRepository.findAll();
-        List<UserResponse> results = new ArrayList<>();
-        for (User user : users) {
-            results.add(userMapper.toUserResponse(user));
-        }
+        List<UserResponse> results = users.stream()
+                .map(userMapper::toUserResponse)
+                .collect(Collectors.toList());
+
         return results;
     }
 
@@ -90,6 +98,10 @@ public class UserServiceImpl implements IUserService {
         userMapper.updateUser(user, request);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
+
+        List<Role> roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));
+
         return userMapper.toUserResponse(userRepository.save(user));
     }
 

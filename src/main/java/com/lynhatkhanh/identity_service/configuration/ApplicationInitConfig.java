@@ -1,7 +1,11 @@
 package com.lynhatkhanh.identity_service.configuration;
 
+import com.lynhatkhanh.identity_service.entity.Role;
 import com.lynhatkhanh.identity_service.entity.User;
 import com.lynhatkhanh.identity_service.enums.RoleEnum;
+import com.lynhatkhanh.identity_service.exception.AppException;
+import com.lynhatkhanh.identity_service.exception.ErrorCode;
+import com.lynhatkhanh.identity_service.repository.RoleRepository;
 import com.lynhatkhanh.identity_service.repository.UserRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +27,21 @@ public class ApplicationInitConfig {
     PasswordEncoder passwordEncoder;
 
     @Bean
-    ApplicationRunner applicationRunner(UserRepository userRepository) {
+    ApplicationRunner applicationRunner(UserRepository userRepository, RoleRepository roleRepository) {
         return args -> {
           if (userRepository.findByUsername("admin").isEmpty()) {
-              HashSet<String> roles = new HashSet<>();
-              roles.add(RoleEnum.ADMIN.name());
+              HashSet<Role> roles = new HashSet<>();
+              Role roleAdmin;
+              if (roleRepository.findById("ADMIN").isEmpty()) {
+                  roleAdmin = Role.builder()
+                          .name("ADMIN")
+                          .description("Admin role.")
+                          .build();
+              } else
+                  roleAdmin = roleRepository.findById("ADMIN")
+                          .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND));
+
+              roles.add(roleAdmin);
 
               User user = User.builder()
                       .username("admin")
