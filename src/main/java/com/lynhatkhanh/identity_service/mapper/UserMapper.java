@@ -11,10 +11,13 @@ import org.mapstruct.MappingTarget;
 // declare to provide Dependency injection => @Autowired
 @Mapper(componentModel = "spring")
 public interface UserMapper {
+    @Mapping(target = "roles", ignore = true)
     User toUser(UserCreationRequest request);
 
     @Mapping(source = "firstName", target = "lastName")
 //    @Mapping(target = "dob", ignore = true)
     UserResponse toUserResponse(User user);
+
+    @Mapping(target = "roles", ignore = true)
     void updateUser(@MappingTarget User user, UserUpdateRequest request);
 }
