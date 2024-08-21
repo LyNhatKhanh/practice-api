@@ -5,6 +5,7 @@ import com.lynhatkhanh.identity_service.enums.RoleEnum;
 import com.lynhatkhanh.identity_service.service.IUserService;
 import com.lynhatkhanh.identity_service.service.implement.AuthenticationService;
 import com.lynhatkhanh.identity_service.service.implement.UserServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,11 +31,14 @@ import javax.crypto.spec.SecretKeySpec;
 public class SecurityConfig {
 
     private static String[] PUBLIC_ENDPOINTS = {
-            "/auth/token", "/auth/introspect"
+            "/auth/token", "/auth/introspect", "/auth/logout"
     };
 
     @Value("${jwt.signerKey}")
     private String signerKey;
+
+    @Autowired
+    private CustomJwtDecoder customJwtDecoder;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
@@ -50,7 +54,7 @@ public class SecurityConfig {
         // verify token
         httpSecurity.oauth2ResourceServer(oauth2 ->
                 oauth2.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(jwtDecoder())
+                        jwtConfigurer.decoder(customJwtDecoder)
                                 // automatically add Prefix: SCOPE_ => if needed to change
                                 .jwtAuthenticationConverter(jwtAuthenticationConverter()))
                         // while authenticate fail => access to this entryPoint
@@ -70,14 +74,6 @@ public class SecurityConfig {
         return jwtAuthenticationConverter;
     }
 
-    @Bean
-    public JwtDecoder jwtDecoder() {
-        SecretKeySpec secretKeySpec = new SecretKeySpec(signerKey.getBytes(),"HS512");
-        return NimbusJwtDecoder
-                .withSecretKey(secretKeySpec)
-                .macAlgorithm(MacAlgorithm.HS512)
-                .build();
-    }
 
     @Bean
     PasswordEncoder passwordEncoder() {
