@@ -3,6 +3,7 @@ package com.lynhatkhanh.identity_service.controller;
 import com.lynhatkhanh.identity_service.dto.request.AuthenticationRequest;
 import com.lynhatkhanh.identity_service.dto.request.IntrospectRequest;
 import com.lynhatkhanh.identity_service.dto.request.LogoutRequest;
+import com.lynhatkhanh.identity_service.dto.request.RefreshRequest;
 import com.lynhatkhanh.identity_service.dto.response.ApiResponse;
 import com.lynhatkhanh.identity_service.dto.response.AuthenticationResponse;
 import com.lynhatkhanh.identity_service.dto.response.IntrospectResponse;
@@ -48,6 +49,15 @@ public class AuthenticationController {
             throws ParseException, JOSEException {
         authenticationService.logout(request);
         return ApiResponse.<Void>builder()
+                .build();
+    }
+
+    @PostMapping("/refreshToken")
+    ApiResponse<AuthenticationResponse> refreshToken(@RequestBody RefreshRequest request)
+            throws ParseException, JOSEException {
+        AuthenticationResponse result = authenticationService.refreshToken(request);
+        return ApiResponse.<AuthenticationResponse>builder()
+                .result(result)
                 .build();
     }
 
