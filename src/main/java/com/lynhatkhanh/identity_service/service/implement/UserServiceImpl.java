@@ -51,6 +51,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     public UserResponse createUser(UserCreationRequest request) {
+        log.info("UserService - createUser");
         if (userRepository.existsByUsername(request.getUsername()))
             throw new AppException(ErrorCode.USER_EXISTED);
 

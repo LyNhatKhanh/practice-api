@@ -44,10 +44,12 @@ public class ApplicationInitConfig {
 
               roles.add(roleAdmin);
 
+              LocalDate dob = LocalDate.of(2001, 2, 24);
               User user = User.builder()
                       .username("admin")
                       .firstName("Khanh")
                       .lastName("Ly")
+                      .dob(dob)
                       .password(passwordEncoder.encode("admin"))
                       .roles(roles)
                       .build();
