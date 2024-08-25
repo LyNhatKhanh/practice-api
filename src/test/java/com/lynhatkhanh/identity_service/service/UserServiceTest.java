@@ -18,13 +18,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @SpringBootTest
@@ -35,12 +33,15 @@ public class UserServiceTest {
 
     @MockBean
     private UserRepository userRepository;
+    @MockBean
+    private RoleRepository roleRepository;
 
     private UserCreationRequest request;
     private UserResponse userResponse;
     private User user;
     Set<String> roles = new HashSet<>();
     private LocalDate dob;
+    List<Role> rolesResponse = new ArrayList<>();
 
     @BeforeEach
     void initData() {
@@ -78,6 +79,7 @@ public class UserServiceTest {
         // GIVEN
         when(userRepository.existsByUsername(anyString())).thenReturn(false);
         when(userRepository.save(any())).thenReturn(user);
+        when(roleRepository.findAllById(any())).thenReturn(rolesResponse);
 
         // WHEN
         var response = userService.createUser(request);
@@ -97,6 +99,33 @@ public class UserServiceTest {
 
         // THEN
         Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(1002);
+    }
+
+    @Test
+    @WithMockUser(username = "john") // get SecurityContextHolder.getContext()
+    void getMyInfo_valid_success() {
+        // GIVEN
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.of(user));
+
+        // WHEN
+        var response = userService.getMyInfo();
+
+        // THEN
+        Assertions.assertThat(response.getUsername()).isEqualTo("john");
+        Assertions.assertThat(response.getId()).isEqualTo("cf0600f538b3");
+    }
+
+    @Test
+    @WithMockUser(username = "john") // get SecurityContextHolder.getContext()
+    void getMyInfo_userNotFound() {
+        // GIVEN
+        when(userRepository.findByUsername(anyString())).thenReturn(Optional.ofNullable(null));
+
+        // WHEN
+        var exception = assertThrows(AppException.class, () -> userService.getMyInfo());
+
+        // THEN
+        Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(2001);
     }
 
 
