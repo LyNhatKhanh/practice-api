@@ -7,9 +7,10 @@ spring:
   application:
     name: identity-service
   datasource:
-    url: "jdbc:mysql://localhost:3306/identity_service"
-    username: springstudent
-    password: springstudent
+    url: "jdbc:mysql://localhost:3308/identity_service"
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
