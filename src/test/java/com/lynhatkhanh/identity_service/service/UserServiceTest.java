@@ -26,7 +26,8 @@ import java.util.*;
 
 
 @SpringBootTest
-@TestPropertySource("/test.properties") // read file and override another in application.properties
+@TestPropertySource("/test.properties") // Isolate UnitTest
+// - read file and override another in application.properties
 public class UserServiceTest {
     @Autowired
     private IUserService userService;

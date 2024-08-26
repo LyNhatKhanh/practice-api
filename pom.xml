@@ -26,6 +26,7 @@
 		<tag/>
 		<url/>
 	</scm>
+
 	<properties>
 		<java.version>17</java.version>
 		<projectlombok-lombok.version>1.18.30</projectlombok-lombok.version>
@@ -33,7 +34,9 @@
 		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 		<h2.version>2.2.224</h2.version>
 		<jacoco.version>0.8.12</jacoco.version>
+		<test-container.version>1.19.7</test-container.version>
 	</properties>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -106,6 +109,17 @@
 			<optional>true</optional>
 		</dependency>
 
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.testcontainers</groupId>
+			<artifactId>mysql</artifactId>
+			<scope>test</scope>
+		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -113,6 +127,18 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.testcontainers</groupId>
+				<artifactId>testcontainers-bom</artifactId>
+				<version>${test-container.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<build>
 		<plugins>
@@ -183,10 +209,10 @@
 				</executions>
 				<configuration>
 					<excludes>
-						<exclude>com/lynhatkhanh/identityservice/dto/**</exclude>
-						<exclude>com/lynhatkhanh/identityservice/entity/**</exclude>
-						<exclude>com/lynhatkhanh/identityservice/mapper/**</exclude>
-						<exclude>com/lynhatkhanh/identityservice/configuration/**</exclude>
+						<exclude>com/lynhatkhanh/identity_service/dto/**</exclude>
+						<exclude>com/lynhatkhanh/identity_service/entity/**</exclude>
+						<exclude>com/lynhatkhanh/identity_service/mapper/**</exclude>
+						<exclude>com/lynhatkhanh/identity_service/configuration/**</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
