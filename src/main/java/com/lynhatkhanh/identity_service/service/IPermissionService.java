@@ -1,9 +1,9 @@
 package com.lynhatkhanh.identity_service.service;
 
+import java.util.List;
+
 import com.lynhatkhanh.identity_service.dto.request.PermissionRequest;
 import com.lynhatkhanh.identity_service.dto.response.PermissionResponse;
-
-import java.util.List;
 
 public interface IPermissionService {
 

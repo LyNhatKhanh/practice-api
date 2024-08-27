@@ -35,6 +35,7 @@
 		<h2.version>2.2.224</h2.version>
 		<jacoco.version>0.8.12</jacoco.version>
 		<test-container.version>1.19.7</test-container.version>
+		<spotless.version>2.43.0</spotless.version>
 	</properties>
 
 	<dependencies>
@@ -189,6 +190,7 @@
 				</configuration>
 			</plugin>
 
+			<!-- Coverage of project (test) -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -215,6 +217,38 @@
 						<exclude>com/lynhatkhanh/identity_service/configuration/**</exclude>
 					</excludes>
 				</configuration>
+			</plugin>
+
+			<!-- Format code with Spotless -->
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${spotless.version}</version>
+				<configuration>
+					<java>
+						<removeUnusedImports />
+						<toggleOffOn/>
+						<trimTrailingWhitespace/>
+						<endWithNewline/>
+						<indent>
+							<tabs>true</tabs>
+							<spacesPerTab>4</spacesPerTab>
+						</indent>
+						<palantirJavaFormat/>
+						<importOrder>
+							<!-- Specify either order or file, but not both -->
+							<order>java,jakarta,org,com,com.diffplug,</order>
+						</importOrder>
+					</java>
+				</configuration>
+				<!--				<executions>-->
+				<!--					<execution>-->
+				<!--						<phase>compile</phase>-->
+				<!--						<goals>-->
+				<!--							<goal>check</goal>-->
+				<!--						</goals>-->
+				<!--					</execution>-->
+				<!--				</executions>-->
 			</plugin>
 
 		</plugins>

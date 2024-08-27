@@ -1,11 +1,7 @@
 package com.lynhatkhanh.identity_service.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
-import com.lynhatkhanh.identity_service.dto.response.UserResponse;
-import com.lynhatkhanh.identity_service.service.IUserService;
-import lombok.extern.slf4j.Slf4j;
+import java.time.LocalDate;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentMatchers;
@@ -21,7 +17,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
+import com.lynhatkhanh.identity_service.dto.response.UserResponse;
+import com.lynhatkhanh.identity_service.service.IUserService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootTest
@@ -60,7 +62,6 @@ public class UserControllerTest {
                 .build();
     }
 
-
     @Test
     @WithMockUser(username = "admin") // => authenticated
     void createUser_validRequest_success() throws Exception {
@@ -76,11 +77,8 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
-                        .value(1000))
-                .andExpect(MockMvcResultMatchers.jsonPath("result.id")
-                        .value("9807403d476c"));
-
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1000))
+                .andExpect(MockMvcResultMatchers.jsonPath("result.id").value("9807403d476c"));
     }
 
     @Test
@@ -97,10 +95,7 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(content))
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("code")
-                        .value(1004))
-                .andExpect(MockMvcResultMatchers.jsonPath("message")
-                        .value("Username must be at least 3 characters!"));
-
+                .andExpect(MockMvcResultMatchers.jsonPath("code").value(1004))
+                .andExpect(MockMvcResultMatchers.jsonPath("message").value("Username must be at least 3 characters!"));
     }
 }

@@ -1,8 +1,9 @@
 package com.lynhatkhanh.identity_service.exception;
 
-import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+
+import lombok.Getter;
 
 @Getter
 public enum ErrorCode {
@@ -17,8 +18,6 @@ public enum ErrorCode {
     USER_NOT_FOUND(2001, "User not found!", HttpStatus.NOT_FOUND),
     ROLE_NOT_FOUND(2002, "Role not found!", HttpStatus.NOT_FOUND),
     INVALID_DOB(1007, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
-
-
     ;
 
     private int code;
@@ -30,5 +29,4 @@ public enum ErrorCode {
         this.message = message;
         this.httpStatusCode = httpStatusCode;
     }
-
 }

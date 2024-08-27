@@ -1,5 +1,10 @@
 package com.lynhatkhanh.identity_service.service.implement;
 
+import java.util.HashSet;
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
 import com.lynhatkhanh.identity_service.dto.request.RoleRequest;
 import com.lynhatkhanh.identity_service.dto.response.RoleResponse;
 import com.lynhatkhanh.identity_service.entity.Permission;
@@ -8,15 +13,11 @@ import com.lynhatkhanh.identity_service.mapper.RoleMapper;
 import com.lynhatkhanh.identity_service.repository.PermissionRepository;
 import com.lynhatkhanh.identity_service.repository.RoleRepository;
 import com.lynhatkhanh.identity_service.service.IRoleService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -42,7 +43,8 @@ public class RoleServiceImpl implements IRoleService {
     @Override
     public List<RoleResponse> getAll() {
         List<Role> roles = roleRepository.findAll();
-        List<RoleResponse> results = roles.stream().map(roleMapper::toRoleResponse).toList();
+        List<RoleResponse> results =
+                roles.stream().map(roleMapper::toRoleResponse).toList();
 
         return results;
     }

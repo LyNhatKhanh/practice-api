@@ -1,17 +1,13 @@
 package com.lynhatkhanh.identity_service.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
-import com.lynhatkhanh.identity_service.dto.response.UserResponse;
-import com.lynhatkhanh.identity_service.entity.Role;
-import com.lynhatkhanh.identity_service.entity.User;
-import com.lynhatkhanh.identity_service.exception.AppException;
-import com.lynhatkhanh.identity_service.repository.RoleRepository;
-import com.lynhatkhanh.identity_service.repository.UserRepository;
+import java.time.LocalDate;
+import java.util.*;
+
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,9 +17,13 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.TestPropertySource;
 
-import java.time.LocalDate;
-import java.util.*;
-
+import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
+import com.lynhatkhanh.identity_service.dto.response.UserResponse;
+import com.lynhatkhanh.identity_service.entity.Role;
+import com.lynhatkhanh.identity_service.entity.User;
+import com.lynhatkhanh.identity_service.exception.AppException;
+import com.lynhatkhanh.identity_service.repository.RoleRepository;
+import com.lynhatkhanh.identity_service.repository.UserRepository;
 
 @SpringBootTest
 @TestPropertySource("/test.properties") // Isolate UnitTest
@@ -34,6 +34,7 @@ public class UserServiceTest {
 
     @MockBean
     private UserRepository userRepository;
+
     @MockBean
     private RoleRepository roleRepository;
 
@@ -128,6 +129,4 @@ public class UserServiceTest {
         // THEN
         Assertions.assertThat(exception.getErrorCode().getCode()).isEqualTo(2001);
     }
-
-
 }

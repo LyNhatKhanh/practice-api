@@ -1,16 +1,15 @@
 package com.lynhatkhanh.identity_service.validator;
 
-import com.lynhatkhanh.identity_service.validator.validator.DobValidator;
+import java.lang.annotation.*;
+
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
-import java.lang.annotation.*;
+import com.lynhatkhanh.identity_service.validator.validator.DobValidator;
 
-@Target({ ElementType.FIELD })
-@Retention( RetentionPolicy.RUNTIME )
-@Constraint(
-        validatedBy = { DobValidator.class }
-)
+@Target({ElementType.FIELD})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = {DobValidator.class})
 public @interface DobConstraint {
 
     String message() default "Invalid date of birth";
@@ -20,5 +19,4 @@ public @interface DobConstraint {
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
-
 }

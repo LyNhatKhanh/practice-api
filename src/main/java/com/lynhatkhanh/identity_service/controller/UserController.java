@@ -1,22 +1,23 @@
 package com.lynhatkhanh.identity_service.controller;
 
-import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
-import com.lynhatkhanh.identity_service.dto.request.UserUpdateRequest;
-import com.lynhatkhanh.identity_service.dto.response.ApiResponse;
-import com.lynhatkhanh.identity_service.dto.response.UserResponse;
-import com.lynhatkhanh.identity_service.entity.User;
-import com.lynhatkhanh.identity_service.service.IUserService;
+import java.util.List;
+
 import jakarta.validation.Valid;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
+import com.lynhatkhanh.identity_service.dto.request.UserUpdateRequest;
+import com.lynhatkhanh.identity_service.dto.response.ApiResponse;
+import com.lynhatkhanh.identity_service.dto.response.UserResponse;
+import com.lynhatkhanh.identity_service.service.IUserService;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/users")
@@ -34,11 +35,11 @@ public class UserController {
     }
 
     @PostMapping
-    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request){
+    ApiResponse<UserResponse> createUser(@RequestBody @Valid UserCreationRequest request) {
         log.info("UserController - createUser");
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setResult(userService.createUser(request));
-         return apiResponse;
+        return apiResponse;
     }
 
     @GetMapping
@@ -61,7 +62,8 @@ public class UserController {
     }
 
     @PutMapping("/{userId}")
-    ApiResponse<UserResponse> updateUser(@PathVariable("userId") String userId, @RequestBody UserUpdateRequest request) {
+    ApiResponse<UserResponse> updateUser(
+            @PathVariable("userId") String userId, @RequestBody UserUpdateRequest request) {
         ApiResponse apiResponse = new ApiResponse();
         apiResponse.setResult(userService.updateUser(userId, request));
         return apiResponse;

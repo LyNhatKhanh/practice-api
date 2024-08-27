@@ -1,26 +1,24 @@
 package com.lynhatkhanh.identity_service.configuration;
 
-import com.lynhatkhanh.identity_service.constant.PredefinedRole;
-import com.lynhatkhanh.identity_service.entity.Role;
-import com.lynhatkhanh.identity_service.entity.User;
-import com.lynhatkhanh.identity_service.enums.RoleEnum;
-import com.lynhatkhanh.identity_service.exception.AppException;
-import com.lynhatkhanh.identity_service.exception.ErrorCode;
-import com.lynhatkhanh.identity_service.repository.RoleRepository;
-import com.lynhatkhanh.identity_service.repository.UserRepository;
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import lombok.experimental.FieldDefaults;
-import lombok.experimental.NonFinal;
-import lombok.extern.slf4j.Slf4j;
+import java.util.HashSet;
+
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.time.LocalDate;
-import java.util.HashSet;
+import com.lynhatkhanh.identity_service.constant.PredefinedRole;
+import com.lynhatkhanh.identity_service.entity.Role;
+import com.lynhatkhanh.identity_service.entity.User;
+import com.lynhatkhanh.identity_service.repository.RoleRepository;
+import com.lynhatkhanh.identity_service.repository.UserRepository;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.FieldDefaults;
+import lombok.experimental.NonFinal;
+import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @RequiredArgsConstructor
