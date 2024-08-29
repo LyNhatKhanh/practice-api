@@ -114,15 +114,23 @@ public class AuthenticationService {
         String jid = signedJWT.getJWTClaimsSet().getJWTID();
         Date expiryTime = signedJWT.getJWTClaimsSet().getExpirationTime();
 
-        InvalidedToken invalidedToken =
-                InvalidedToken.builder().id(jid).expiryTime(expiryTime).build();
+        // spotless:off
+        InvalidedToken invalidedToken = InvalidedToken.builder()
+                .id(jid)
+                .expiryTime(expiryTime)
+                .build();
         invalidedTokenRepository.save(invalidedToken);
 
         String username = signedJWT.getJWTClaimsSet().getSubject();
-        User user =
-                userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
+
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new AppException(ErrorCode.UNAUTHENTICATED));
         token = generateToken(user);
-        return AuthenticationResponse.builder().token(token).authenticated(true).build();
+        return AuthenticationResponse.builder()
+                .token(token)
+                .authenticated(true)
+                .build();
+        //spotless:on
     }
 
     public String generateToken(User user) {

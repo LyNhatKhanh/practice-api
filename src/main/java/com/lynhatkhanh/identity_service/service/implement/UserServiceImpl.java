@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContext;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.lynhatkhanh.identity_service.constant.PredefinedRole;
 import com.lynhatkhanh.identity_service.dto.request.UserCreationRequest;
 import com.lynhatkhanh.identity_service.dto.request.UserUpdateRequest;
 import com.lynhatkhanh.identity_service.dto.response.UserResponse;
@@ -51,22 +53,25 @@ public class UserServiceImpl implements IUserService {
 
     public UserResponse createUser(UserCreationRequest request) {
         log.info("UserService - createUser");
-        if (userRepository.existsByUsername(request.getUsername())) throw new AppException(ErrorCode.USER_EXISTED);
 
-        User newUser = userMapper.toUser(request);
+        User user = userMapper.toUser(request);
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(10);
-        newUser.setPassword(passwordEncoder.encode(request.getPassword()));
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        /*HashSet<String> roles = new HashSet<>();
-        roles.add(RoleEnum.USER.name());
-        newUser.setRoles(roles);*/
+        /*List<Role> roles = roleRepository.findAllById(request.getRoles());
+        user.setRoles(new HashSet<>(roles));*/
 
-        List<Role> roles = roleRepository.findAllById(request.getRoles());
-        newUser.setRoles(new HashSet<>(roles));
+        HashSet<Role> roles = new HashSet<>();
+        roleRepository.findById(PredefinedRole.USER_ROLE).ifPresent(roles::add);
+        user.setRoles(roles);
 
-        User createdUser = userRepository.save(newUser);
+        try {
+            user = userRepository.save(user);
+        } catch (DataIntegrityViolationException e) {
+            throw new AppException(ErrorCode.USER_EXISTED);
+        }
 
-        return userMapper.toUserResponse(createdUser);
+        return userMapper.toUserResponse(user);
     }
 
     @Override
