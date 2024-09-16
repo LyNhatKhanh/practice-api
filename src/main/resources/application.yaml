@@ -8,7 +8,7 @@ spring:
     name: identity-service
   datasource:
     # ${environment variable : default variable}
-    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3308/identity_service}
+    url: ${DBMS_CONNECTION:jdbc:mysql://localhost:3306/identity_service}
     username: ${DBMS_USERNAME:root}
     password: ${DBMS_PASSWORD:root}
     driver-class-name: com.mysql.cj.jdbc.Driver
